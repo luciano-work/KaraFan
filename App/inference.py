@@ -323,15 +323,15 @@ class MusicSeparationModel:
 		self.Progress.reset(0, unit="Pass");  start_time = time.time()
 
 		# Delete previous files
-		if os.path.exists(self.song_output_path):
-			if not self.GOD_MODE:
-				print("► No GOD MODE : Re-process ALL files ...")
-				for file in os.listdir(self.song_output_path):
-					if file != "SDR_Results.txt" and file.endswith(self.output_format):
-						os.remove(os.path.join(self.song_output_path, file))
-		else:
-			# Create a folder based on input audio file's name
-			os.makedirs(self.song_output_path)
+		# if os.path.exists(self.song_output_path):
+		# 	if not self.GOD_MODE:
+		# 		print("► No GOD MODE : Re-process ALL files ...")
+		# 		for file in os.listdir(self.song_output_path):
+		# 			if file != "SDR_Results.txt" and file.endswith(self.output_format):
+		# 				os.remove(os.path.join(self.song_output_path, file))
+		# else:
+		# 	# Create a folder based on input audio file's name
+		# 	os.makedirs(self.song_output_path)
 		
 		print("Go with : <b>" + name + "</b>")
 
@@ -358,7 +358,7 @@ class MusicSeparationModel:
 				print(f"► Normalizing audio : {self.normalize} dB")
 				normalized = App.audio_utils.Normalize(original_audio, self.normalize)
 
-				self.Save_Audio(0, normalized, '', audio_file)
+				# self.Save_Audio(0, normalized, '', audio_file)
 		else:
 			normalized = original_audio
 		
@@ -373,7 +373,7 @@ class MusicSeparationModel:
 				if audio is None:
 					audio = self.Extract_with_Model("Music", normalized, model)
 					
-					self.Save_Audio(1, audio, model['Name'], audio_file)
+					#self.Save_Audio(1, audio, model['Name'], audio_file)
 				
 				music_extracts.append(audio)
 			
@@ -395,7 +395,7 @@ class MusicSeparationModel:
 			if audio is None:
 				audio = self.Extract_with_Model("Vocal", vocal_sub, model)
 				
-				self.Save_Audio(2, audio, model['Name'], audio_file)
+				#self.Save_Audio(2, audio, model['Name'], audio_file)
 			
 			vocal_extracts.append(audio)
 		
@@ -419,7 +419,7 @@ class MusicSeparationModel:
 				if audio is None:
 					audio = self.Extract_with_Model("Bleed_Music", vocal_ensemble, model)
 
-					self.Save_Audio(3, audio, model['Name'], audio_file)
+					#self.Save_Audio(3, audio, model['Name'], audio_file)
 				
 				bleed_extracts.append(audio)
 				
@@ -469,7 +469,7 @@ class MusicSeparationModel:
 				if audio is None:
 					audio = self.Extract_with_Model("Bleed_Vocal", music_sub, model)
 
-					self.Save_Audio(4, audio, model['Name'], audio_file)
+					#self.Save_Audio(4, audio, model['Name'], audio_file)
 				
 				bleed_extracts.append(audio)
 				
@@ -487,7 +487,7 @@ class MusicSeparationModel:
 					if audio is None:
 						audio = self.Extract_with_Model("Bleed_Music", bleed_ensemble, model)
 
-						self.Save_Audio(5, audio, model['Name'], audio_file)
+						#self.Save_Audio(5, audio, model['Name'], audio_file)
 					
 					music_extracts.append(audio)
 					
@@ -510,7 +510,7 @@ class MusicSeparationModel:
 		# Apply silence filter
 		if self.silent < 0:  vocal_final = App.audio_utils.Silent(vocal_final, self.sample_rate, self.silent)
 
-		self.Save_Audio(6, vocal_final, '', audio_file)
+		self.Save_Audio(name, vocal_final, 'Vocals', audio_file)
 
 		print("► Save Music FINAL !")
 		
@@ -520,7 +520,7 @@ class MusicSeparationModel:
 		# Apply silence filter
 		if self.silent < 0:  music_final = App.audio_utils.Silent(music_final, self.sample_rate, self.silent)
 
-		self.Save_Audio(7, music_final, '', audio_file)
+		self.Save_Audio(name, music_final, 'Instrumental', audio_file)
 
 		print('<b>--> Processing DONE !</b>')
 
@@ -802,7 +802,8 @@ class MusicSeparationModel:
 
 		if model_name != "":  filename += " - ("+ model_name +")"
 
-		file = os.path.join(self.song_output_path, filename)
+		# file = os.path.join(self.song_output_path, filename)
+		file = os.path.join(self.output, filename)
 		
 		App.audio_utils.Save_Audio(file, audio, self.sample_rate, self.output_format, self.original_cutoff, self.ffmpeg, audio_file)
 
