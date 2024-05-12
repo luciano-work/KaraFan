@@ -98,13 +98,18 @@ def Save_Audio(file_path, audio, sample_rate, output_format, cut_off, ffmpeg, au
 	output_format = file_format(output_path)
 
 	if(input_format == '.mp3' and output_format == '.mp3'):
-		input_tags = ID3(audio_file)
-		output_tags = ID3(output_path)
-		for tag in input_tags:
-			output_tags[tag] = input_tags[tag]
+		# try copying tags
+		try:
+			input_tags = ID3(audio_file)
+			output_tags = ID3(output_path)
+			for tag in input_tags:
+				output_tags[tag] = input_tags[tag]
 
-		print("► Copying tags...")
-		output_tags.save()
+			print("► Copying tags...")
+			output_tags.save()
+		except Exception as e:
+			print(f"Error : {e}")
+
 
 def Normalize(audio, threshold_dB = -1.0):
 	"""

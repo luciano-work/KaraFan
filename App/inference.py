@@ -922,7 +922,7 @@ class CustomPrint:
 
 				self.CONSOLE.AppendToPage(text)
 				self.CONSOLE.Update()
-				self.CONSOLE.ScrollLines(1)
+				# self.CONSOLE.ScrollLines(1)
 		else:
 			# We are in a terminal
 			text = regex.sub(r"<br>", "\n", text)  # Convert <br> to \n
